@@ -3,13 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-jet-mono: var(--font-jetbrains-mono);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-jet-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +22,65 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jet-mono), monospace;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  /*overflow: hidden;*/
+}
+
+/* ACTIVATION DES LIGATURES POUR LE CODE */
+code, pre, kbd {
+  font-variant-ligatures: normal; /* Force l'activation des ligatures standard */
+  font-feature-settings: "calt" 1; /* Assure la compatibilité avec les variantes contextuelles */
+}
+
+a:focus-visible {
+  border: 1px solid #CEF739;
+  outline: none;
+  border-radius: 8px;
+}
+
+button:focus-visible {
+  border: 1px solid #CEF739;
+  outline: none;
+}
+
+input:focus-visible {
+  outline: none;
+  border: 2px solid #CEF739;
+}
+
+.btn {
+  position: relative;
+  isolation: isolate;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid transparent;
+  border-radius: calc(0.5rem + 4px); /* adapte selon ton rounded-lg */
+  pointer-events: none;
+  opacity: 0;
+  transition:
+          opacity .2s ease,
+          border-color .2s ease;
+}
+
+.btn:focus-visible {
+  outline: none;
+  border-color: #CEF739;
+}
+
+.btn:focus-visible::after {
+  opacity: 1;
+  border-color: #CEF739;
+}
+
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
