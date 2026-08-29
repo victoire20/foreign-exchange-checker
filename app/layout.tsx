@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono  } from "next/font/google";
-//import "./reset.css";
 import "./globals.css";
 import {Provider} from "@/providers/provider";
 

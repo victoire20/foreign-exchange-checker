@@ -1,12 +1,13 @@
 import {FaAngleDown, FaAngleUp} from "react-icons/fa"
 import {Badge} from "@/components/ui/badge"
-import {useState} from "react"
+import {ReactNode, useState} from "react"
 
 
 export type SelectOption = {
     label: string;
     value: string;
     badge?: number;
+    content?: ReactNode;
 }
 
 type SelectProps = {
@@ -46,17 +47,17 @@ export const Select = ({
                     : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                 }`}
             >
-                {options.map(option => (
+                {options.map((option) => (
                     <a
                         key={option.value}
                         role="button"
-                        className={`px-2 py-[10.5px] ${(option.badge || option.badge !== 0) && 'flex justify-between'}`}
+                        className={`px-2 py-[10.5px] ${option.badge && 'flex justify-between'}`}
                         onClick={() => {
-                            onChange(option.value);
-                            setIsOpen(false);
+                            onChange(option.value)
+                            setIsOpen(false)
                         }}
                     >
-                        {option.label} {option.badge && <Badge value={option.badge} />}
+                        {option.label} {option.badge && <Badge value={option.badge} isLoading={false} />}
                     </a>
                 ))}
             </div>

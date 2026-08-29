@@ -1,6 +1,7 @@
 import {Marker} from "@/components/features/live-markers/Marker";
+import {Rate} from "@/components/features/convert-wrapper/currency-selector/types/forex.type";
 
-export const LiveMarkers = () => {
+export const LiveMarkers = ({ data, isLoading }: { data: Array<Rate>, isLoading: boolean }) => {
     return <div className="flex items-center static">
         <div
             className="shrink-0 bg-[#CEF739] font-bold text-[#0A0A0A] text-[10px] leading-[100%] tracking-normal w-max
@@ -11,7 +12,7 @@ export const LiveMarkers = () => {
         </div>
 
         <div className="flex-1 min-w-0">
-            <Marker />
+            <Marker isLoading={isLoading} data={data} />
         </div>
     </div>
 }
