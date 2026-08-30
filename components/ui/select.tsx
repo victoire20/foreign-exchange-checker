@@ -1,6 +1,7 @@
 import {FaAngleDown, FaAngleUp} from "react-icons/fa"
 import {Badge} from "@/components/ui/badge"
-import {ReactNode, useState} from "react"
+import {ReactNode, useRef, useState} from "react"
+import {useClickOutside} from "@/components/features/convert-wrapper/useClickOutside";
 
 
 export type SelectOption = {
@@ -23,11 +24,16 @@ export const Select = ({
    onChange,
    className = ""
 }: SelectProps) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement>(null)
 
     const selectedOption = options.find(
         option => option.value === value
     )
+
+    useClickOutside(dropdownRef, () => {
+        setIsOpen(false)
+    })
 
     return <div className={`relative flex justify-between items-center rounded-lg p-3 bg-[#171719] border border-[#3D3D3D] ${className}`}>
         <div
@@ -39,6 +45,7 @@ export const Select = ({
         </div>
         {isOpen && (
             <div
+                ref={dropdownRef}
                 className={`absolute top-12 bg-[#171719] flex flex-col text-[16px] leading-[120%] tracking-[1px]
                     uppercase border border-[#202022] p-2 rounded-[10px] z-10 w-full right-[0.3px] 
                     transition-all duration-300 ease-out 

@@ -60,10 +60,10 @@ export const logStorage = {
      * Supprime uniquement la clé des logs du localStorage
      */
     clearLogsOnly: (): void => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') return
 
-        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STORAGE_KEY)
 
-        window.dispatchEvent(new Event("local-storage-update"));
+        window.dispatchEvent(new Event("local-storage-update"))
     }
 }

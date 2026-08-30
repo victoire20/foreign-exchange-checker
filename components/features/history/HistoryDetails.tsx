@@ -14,8 +14,6 @@ interface Props {
 
 const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
     const [period, setPeriod] = useState<string>('d')
-    const [change, setChange] = useState<string>('0')
-    const [percent, setPercent] = useState<number>(0)
 
     const { data: historyRate = [], isLoading, isError, error, refetch } = useCompareYesterdayRate({
         b: rate.base,
@@ -28,23 +26,21 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
         await refetch()
     }
 
-    useEffect(() => {
-        if (!historyRate || historyRate.length === 0) return
+    const hasHistory = historyRate && historyRate.length > 0
+    const firstRate = hasHistory ? historyRate[0].rate : 0
+    const lastRate = hasHistory ? historyRate[historyRate.length - 1].rate : 0
 
-        const firstRate = historyRate[0].rate
-        const lastRate = historyRate[historyRate.length - 1].rate
+    let numericChange = 0
+    let numericPercent = 0
 
-        let numericChange = 0
-        let numericPercent = 0
+    if (historyRate && historyRate.length > 1) {
+        numericChange = firstRate - lastRate
+        numericPercent = firstRate !== 0 ? (numericChange / firstRate) : 0
+    }
 
-        if (historyRate.length > 1) {
-            numericChange = firstRate - lastRate
-            numericPercent = firstRate !== 0 ? (numericChange / firstRate) : 0
-        }
+    const changeDisplay = numericChange.toFixed(5)
+    const percentDisplay = numericPercent
 
-        setChange(numericChange.toFixed(5))
-        setPercent(numericPercent)
-    }, [historyRate])
 
     if (isError) {
         return <>
@@ -74,20 +70,20 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                 <Card
                     isLoading={isLoading || currenciesIsLoading}
                     label="change"
-                    value={`${+change > 0 ? '+' : ''}${change}`}
-                    classNameValue={+change >= 0 ? 'text-[#42EB05]' : 'text-[red]'} />
+                    value={`${+changeDisplay > 0 ? '+' : ''}${changeDisplay}`}
+                    classNameValue={+changeDisplay >= 0 ? 'text-[#42EB05]' : 'text-[red]'} />
                 <Card
-                    classNameValue={+change >= 0 ? 'text-[#42EB05]' : 'text-[red]'}
+                    classNameValue={+changeDisplay >= 0 ? 'text-[#42EB05]' : 'text-[red]'}
                     isLoading={isLoading || currenciesIsLoading}
                     label="% change"
-                    value={`${percent > 0 ? '▲ ' : percent < 0 ? '▼ ' : ''}${Math.abs(Number(percent)).toFixed(5)}`}
+                    value={`${percentDisplay > 0 ? '▲ ' : percentDisplay < 0 ? '▼ ' : ''}${Math.abs(Number(percentDisplay)).toFixed(5)}`}
                 />
             </div>
             <nav
                 className={`${(isLoading || currenciesIsLoading) && 'skeleton-item'} p-0.5 max-w-71.5 rounded-lg bg-[#171719] flex 
                 justify-between items-center text-[#9D9D9D] text-[12px] leading-[120%] tracking-[0.5px]`}>
                 <button
-                    disabled={isLoading || currenciesIsLoading}
+                    disabled={isLoading}
                     className={
                         `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'd' ?
@@ -98,7 +94,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('d')}
                 >1D</button>
                 <button
-                    disabled={isLoading || currenciesIsLoading}
+                    disabled={isLoading}
                     className={
                         `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'w' ? 
@@ -109,7 +105,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('w')}
                 >1W</button>
                 <button
-                    disabled={isLoading || currenciesIsLoading}
+                    disabled={isLoading}
                     className={
                         `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'm' ?
@@ -120,7 +116,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('m')}
                 >1M</button>
                 <button
-                    disabled={isLoading || currenciesIsLoading}
+                    disabled={isLoading}
                     className={
                         `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
                          ${period === '3m' ?
@@ -131,7 +127,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('3m')}
                 >3M</button>
                 <button
-                    disabled={isLoading || currenciesIsLoading}
+                    disabled={isLoading}
                     className={
                         `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'y' ?
@@ -142,7 +138,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('y')}
                 >1Y</button>
                 <button
-                    disabled={isLoading || currenciesIsLoading}
+                    disabled={isLoading}
                     className={
                         `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
                          ${period === '5y' ?

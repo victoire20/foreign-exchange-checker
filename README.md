@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Mentor - FX Checker solution
 
-## Getting Started
+This is a solution to the [FX Checker challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/foreign-exchange-currency-converter). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
 
-First, run the development server:
+## Table of contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [Continued development](#continued-development)
+  - [Useful resources](#useful-resources)
+  - [AI Collaboration](#ai-collaboration)
+- [Author](#author)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### The challenge
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Your users should be able to:
 
-## Learn More
+#### Converter
 
-To learn more about Next.js, take a look at the following resources:
+- Enter an amount to send and see it convert in real time as they type
+- Pick the "send" and "receive" currencies from a searchable currency picker
+- See the live exchange rate for the active pair (for example, `1 USD = 0.8530 EUR`)
+- Swap the send and receive currencies with the swap button
+- Favorite the active pair, and log a conversion to their history
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Currency picker
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Search the full list of available currencies by code or name
+- See currencies grouped into "Popular" and "Other currencies", each row showing the flag, code, and name
+- See a check against the currency that's currently selected
 
-## Deploy on Vercel
+#### Live markets ticker
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- See a ticker of currency pairs, each with its current rate and 24-hour change (up or down)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Rate history
+
+- View a line and area chart of the active pair's rate over time
+- Switch the chart range between 1D, 1W, 1M, 3M, 1Y, and 5Y
+- See the open, last, absolute change, and percentage change for the selected range
+
+#### Compare
+
+- See their send amount converted into a range of other currencies at once, each with its reference rate
+- Pin or unpin any comparison row to their favorites
+
+#### Favorites
+
+- See their pinned pairs, each with its live rate and 24-hour change
+- Load a pinned pair back into the converter by selecting its row
+- Unpin a pair they no longer want to track
+
+#### Conversion log
+
+- See a log of conversions they've made, each showing the relative time, the pair, and the send and receive amounts
+- Clear the whole log
+- Delete an individual entry
+
+#### UI & accessibility
+
+- View the optimal layout for the interface depending on their device's screen size
+- See hover and focus states for all interactive elements on the page
+- Navigate the entire app using only their keyboard
+
+### Screenshot
+| Desktop                     | Mobile                     |
+|-----------------------------|----------------------------|
+| ![](./solution/desktop.jpg) | ![](./solution/mobile.jpg) |
+
+### Links
+
+- Solution URL: [Add solution URL here](https://your-solution-url.com)
+- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+
+## My process
+
+### Built with
+
+- Semantic HTML5 markup
+- CSS custom properties
+- Tailwind CSS
+- Flexbox
+- Mobile-first workflow
+- [Next.js](https://nextjs.org/) - React framework
+- [Styled Components](https://styled-components.com/) - For styles
+
+### Continued development
+
+I want to implement:
+- white theme
+- dashboard user for manage his data
+
+### Useful resources
+
+- [Sonner - Shadcn UI](https://www.example.com) - I used that for the customizable toast alert
+
+### AI Collaboration
+
+Describe how you used AI tools (if any) during this project. This helps demonstrate your ability to work effectively with AI assistants.
+
+- I use free version of Codex and Copilote
+- I use that for scanne my project to detect some erreur what i don't see! Je dois avouer que cela m'a vraiment aider quand j'ai ajouter flex-rows dans une class et que j'ai passé au moins 30min à chercher sans savoir où est ce que je m'étais trompé 😅
+- Honnêtement, je trouve que la seule différence est la manière dont est utilisés les tokens ! C'est avis, mais j'ai remarqué que c'est bien mieux optimisé dans copilote que dans codex! Sauf que je mets parfois un de temps a insisté pour dire non, je veux que tu choisisses cette approche plutôt que l'autre à copilote qu'à codex 😅
+
+## Author
+
+- Website - [Add your name here](https://www.your-site.com)
+- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
+
+

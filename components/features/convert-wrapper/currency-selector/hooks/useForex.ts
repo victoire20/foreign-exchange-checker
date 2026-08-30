@@ -2,7 +2,7 @@ import {useQuery} from "@tanstack/react-query";
 import {
     getCompareYesterdayRate,
     getCurrencies,
-    getLiveMarkets, getLogData,
+    getLiveMarkets,
     getRate
 } from "@/components/features/convert-wrapper/currency-selector/services/forexService";
 

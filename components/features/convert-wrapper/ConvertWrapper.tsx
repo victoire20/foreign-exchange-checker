@@ -50,7 +50,6 @@ export const ConvertWrapper = ({
     const [showToastFavorite, setShowToastFavorite] = useState(false)
     const [toastMessage, setToastMessage] = useState("")
 
-    // Vérifier si la paire actuelle est favorite
     const currentBase = baseDevice?.iso_code.toUpperCase() || rate.base.toUpperCase()
     const currentQuote = quoteDevice?.iso_code.toUpperCase() || rate.quote.toUpperCase()
     const isCurrentPairFavorite = favorites.some(
@@ -93,11 +92,9 @@ export const ConvertWrapper = ({
         const quote = quoteDevice?.iso_code || rate.quote
 
         if (isCurrentPairFavorite) {
-            // Supprimer des favoris
             onDeleteFavorite(base, quote)
             setToastMessage("Removed from favorites")
         } else {
-            // Ajouter aux favoris
             onAddFavorite(base, quote)
             setToastMessage("Added to favorites")
         }
@@ -106,9 +103,7 @@ export const ConvertWrapper = ({
         setTimeout(() => setShowToastFavorite(false), 3000)
     }
 
-    const handleLog = (e) => {
-        e.preventDefault()
-
+    const handleLog = () => {
         const newLog: Log = {
             'time': String(new Date(Date.now())),
             'pair': [baseDevice?.iso_code || rate.base, quoteDevice?.iso_code || rate.quote],
@@ -137,8 +132,8 @@ export const ConvertWrapper = ({
     }
 
     const handleSwapDevice = () => {
-        const currentBase = baseDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'usd')
-        const currentRating = quoteDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'eur')
+        const currentBase = baseDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'usd')!
+        const currentRating = quoteDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'eur')!
 
         setBaseDevice(currentRating)
         setQuoteDevice(currentBase)

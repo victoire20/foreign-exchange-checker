@@ -1,7 +1,7 @@
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {Input} from "@/components/ui/input";
 import { SelectOptions } from "@/components/features/convert-wrapper/currency-selector/SelectOptions";
-import {ChangeEvent, RefObject, useRef} from "react";
+import {ChangeEvent, useRef} from "react";
 import Image from "next/image";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
 import {useClickOutside} from "@/components/features/convert-wrapper/useClickOutside";
@@ -32,7 +32,7 @@ export const Select = ({
     device,
     isLoading
 }: props) => {
-    const dropdownRef = useRef<HTMLAnchorElement>(null)
+    const dropdownRef = useRef<HTMLDivElement>(null)
 
     useClickOutside(dropdownRef, () => {
         setIsOpen(false)

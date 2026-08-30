@@ -178,9 +178,9 @@ export default function ChartHistory({ rate, isLoading, historyRate, period }: P
                 </div>
             </div>
         ) : (
-            <div className="bg-[#171719] border border-[#202022] rounded-2xl text-center py-5 px-20 md:py-10 md:px-45 lg:px-60">
-                <h2 className="text-[#C6C6C6] text-[20px] leading-[120%] tracking-[-0.5px] mb-4">No chart data available</h2>
-                <p className="text-[#9D9D9D] text-[14px] leading-[120%] tracking-[1px]">
+            <div className={`${isLoading && 'skeleton-item'} bg-[#171719] border border-[#202022] rounded-2xl text-center py-5 px-20 md:py-10 md:px-45 lg:px-60`}>
+                <h2 className={`${isLoading && 'skeleton-item'} text-[#C6C6C6] text-[20px] leading-[120%] tracking-[-0.5px] mb-4`}>No chart data available</h2>
+                <p className={`${isLoading && 'skeleton-item'} text-[#9D9D9D] text-[14px] leading-[120%] tracking-[1px]`}>
                     {`We couldn't load rate history for ${rate.base}/${rate.quote} right now. This usually clears up in a minute.`}
                 </p>
             </div>
