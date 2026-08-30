@@ -45,7 +45,7 @@ export const Select = ({
         >
             <Image
                 className="rounded-[50%]"
-                src={`/images/1x1/${device?.iso_code.slice(0, 2)}.svg`}
+                src={`/images/1x1/${device?.iso_code.toLowerCase().slice(0, 2)}.svg`}
                 alt={`flag ${device?.name}`}
                 width={20}
                 height={20}
