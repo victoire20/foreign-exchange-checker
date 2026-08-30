@@ -58,12 +58,12 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
         <div className="flex flex-col gap-5 lg:flex-row lg:justify-between lg:items-center">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4 lg:max-w-[80%]">
                 <Card
-                    isLoading={isLoading}
+                    isLoading={isLoading || currenciesIsLoading}
                     label="open"
                     value={openValue}
                 />
                 <Card 
-                    isLoading={isLoading} 
+                    isLoading={isLoading || currenciesIsLoading}
                     label="last" 
                     value={lastValue} 
                 />
