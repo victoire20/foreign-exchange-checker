@@ -75,8 +75,8 @@ Your users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- Solution URL: [https://github.com/victoire20/foreign-exchange-checker](https://github.com/victoire20/foreign-exchange-checker)
+- Live Site URL: [https://foreign-exchange-checker-murex.vercel.app](https://foreign-exchange-checker-murex.vercel.app)
 
 ## My process
 
@@ -98,7 +98,7 @@ I want to implement:
 
 ### Useful resources
 
-- [Sonner - Shadcn UI](https://www.example.com) - I used that for the customizable toast alert
+- [Sonner - Shadcn UI](https://ui.shadcn.com/docs/components/radix/sonner) - I used that for the customizable toast alert
 
 ### AI Collaboration
 
@@ -110,7 +110,7 @@ Describe how you used AI tools (if any) during this project. This helps demonstr
 
 ## Author
 
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
+- Website - [https://portfolio-eight-dun-30.vercel.app](https://portfolio-eight-dun-30.vercel.app)
+- Frontend Mentor - [@victoire20](https://www.frontendmentor.io/profile/victoire20)
 
 
