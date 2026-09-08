@@ -32,6 +32,7 @@ interface AreaChartProps {
     isLoading: boolean;
     labels: string[];
     chartDataValues: number[];
+    options: ChartOptions<'line'>;
 }
 
 const options: ChartOptions<'line'> = {
@@ -57,7 +58,7 @@ const options: ChartOptions<'line'> = {
     },
 }
 
-function AreaChart({ isLoading, labels, chartDataValues }: AreaChartProps) {
+function AreaChart({ isLoading, labels, chartDataValues, options }: AreaChartProps) {
     // Créer un gradient pour le remplissage
     const chartConfig: ChartData<'line'> = {
         labels: labels,
@@ -169,8 +170,10 @@ function normalizeYAxis(data: number[]): { min: number; max: number; padding: nu
     const max = Math.max(...data)
     const range = max - min
 
-    // Ajouter 10% de padding pour une meilleure visualisation
-    const padding = range * 0.1
+    // Keep a visible Y-axis when all points have the same value.
+    const padding = range === 0
+        ? Math.max(Math.abs(max) * 0.01, 0.0001)
+        : range * 0.1
 
     return {
         min: Math.max(0, min - padding),
@@ -232,7 +235,12 @@ export default function ChartHistory({ rate, isLoading, historyRate, period }: P
                         {chartDataValues[chartDataValues.length - 1]?.toFixed(5)} · {dateFormat(String(historyRate.at(-1)?.date))}
                     </span>
                 </div>
-                <AreaChart isLoading={false} labels={labels} chartDataValues={chartDataValues} />
+                <AreaChart
+                    isLoading={false}
+                    labels={labels}
+                    chartDataValues={chartDataValues}
+                    options={customOptions}
+                />
             </div>
         ) : (
             <div className="bg-[#171719] border border-[#202022] rounded-2xl text-center py-5 px-20 md:py-10 md:px-45 lg:px-60">

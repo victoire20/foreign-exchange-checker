@@ -132,8 +132,10 @@ export const ConvertWrapper = ({
     }
 
     const handleSwapDevice = () => {
-        const currentBase = baseDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'usd')!
-        const currentRating = quoteDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'eur')!
+        const currentBase = baseDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'usd')
+        const currentRating = quoteDevice ?? filterData.find((c: Currency) => c.iso_code.toLowerCase() === 'eur')
+
+        if (!currentBase || !currentRating) return
 
         setBaseDevice(currentRating)
         setQuoteDevice(currentBase)
