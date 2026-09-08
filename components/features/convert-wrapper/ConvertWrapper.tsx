@@ -241,7 +241,7 @@ export const ConvertWrapper = ({
 
                                     if (/^\d*\.?\d*$/.test(rawValue)) {
                                         setQuoteValue(rawValue)
-                                        const b = parseFloat(quoteValue) / rate?.rate
+                                        const b = parseFloat(rawValue) / rate?.rate
                                         setBaseValue(String(b.toFixed(5)))
                                     }
                                 }}
