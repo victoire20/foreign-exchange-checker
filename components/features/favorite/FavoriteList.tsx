@@ -10,6 +10,7 @@ import {Toast} from "@/components/ui/toast";
 interface Props {
     favorites: FavoritePair[];
     onDeleteFavorite: (index: number) => void;
+    onSelectFavorite: (favorite: FavoritePair) => void;
 }
 
 interface FavoriteDisplay {
@@ -20,7 +21,7 @@ interface FavoriteDisplay {
     variation: number;
 }
 
-const FavoriteList = ({ favorites, onDeleteFavorite }: Props) => {
+const FavoriteList = ({ favorites, onDeleteFavorite, onSelectFavorite }: Props) => {
     const [favoriteDisplays, setFavoriteDisplays] = useState<FavoriteDisplay[]>([])
     const [showToast, setShowToast] = useState(false)
     const [isHydrated, setIsHydrated] = useState(false)
@@ -70,6 +71,7 @@ const FavoriteList = ({ favorites, onDeleteFavorite }: Props) => {
                             favorite={favorite}
                             index={index}
                             onDelete={() => handleDeleteFavorite(index)}
+                            onSelect={() => onSelectFavorite(favorite)}
                         />
                     ))}
                 </div>
@@ -85,7 +87,17 @@ const FavoriteList = ({ favorites, onDeleteFavorite }: Props) => {
     </div>
 }
 
-const FavoritePairItem = ({ favorite, index, onDelete }: { favorite: FavoritePair; index: number; onDelete: () => void }) => {
+const FavoritePairItem = ({
+    favorite,
+    index,
+    onDelete,
+    onSelect,
+}: {
+    favorite: FavoritePair;
+    index: number;
+    onDelete: () => void;
+    onSelect: () => void;
+}) => {
     const { data: historyRate = [] } = useCompareYesterdayRate({
         b: favorite.base,
         q: favorite.quote,
@@ -103,7 +115,7 @@ const FavoritePairItem = ({ favorite, index, onDelete }: { favorite: FavoritePai
             setRate(lastRate)
             
             if (lastRate !== 0 && firstRate !== 0) {
-                const change = firstRate - lastRate
+                const change = lastRate - firstRate
                 const percent = (change / firstRate) * 100
                 setVariation(percent)
             }
@@ -112,8 +124,10 @@ const FavoritePairItem = ({ favorite, index, onDelete }: { favorite: FavoritePai
 
     return (
         <div
+            onClick={onSelect}
             className="p-[12px] min-w-[100%] bg-[#202022] border border-[#2E2E2E] hover:border-[#454547]
-                rounded-[10px] flex justify-between items-center md:cursor-pointer">
+                rounded-[10px] flex justify-between items-center md:cursor-pointer"
+        >
             <div className="uppercase flex gap-[8px] items-center text-[14px] leading-[120%] tracking-[1px]">
                 {favorite.base} <FaArrowRight className="text-[#9D9D9D] text-[10px]" /> {favorite.quote}
             </div>
@@ -137,7 +151,10 @@ const FavoritePairItem = ({ favorite, index, onDelete }: { favorite: FavoritePai
                     </span>
                 </div>
                 <button
-                    onClick={onDelete}
+                    onClick={(event) => {
+                        event.stopPropagation()
+                        onDelete()
+                    }}
                     className={`p-[8px] bg-[#202022] border border-[#CEF739] rounded-[8px] hover:bg-[#3D3D3D] md:cursor-pointer transition-all duration-300`}>
                     <FaStar className="text-[#CEF739]" />
                 </button>

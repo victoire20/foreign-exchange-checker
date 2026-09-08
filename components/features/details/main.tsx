@@ -24,6 +24,7 @@ interface Props {
     onDeleteFavorite: (index: number) => void;
     onAddFavorite: (base: string, quote: string) => void;
     onDeleteFavoriteByCode: (base: string, quote: string) => void;
+    onSelectFavorite: (favorite: FavoritePair) => void;
 }
 
 export default function Details({
@@ -38,6 +39,7 @@ export default function Details({
     onDeleteFavorite,
     onAddFavorite,
     onDeleteFavoriteByCode,
+    onSelectFavorite,
 }: Props) {
 
     const { data: compareRates = [] } = useCompareYesterdayRate({b: rate.base})
@@ -138,7 +140,13 @@ export default function Details({
             label: "favorites",
             value: "favorites",
             badge: favorites.length,
-            content: <FavoriteList favorites={favorites} onDeleteFavorite={handleDeleteFavoriteItem} />
+            content: (
+                <FavoriteList
+                    favorites={favorites}
+                    onDeleteFavorite={handleDeleteFavoriteItem}
+                    onSelectFavorite={onSelectFavorite}
+                />
+            )
         },
         {
             label: "Log",

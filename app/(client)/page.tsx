@@ -78,6 +78,18 @@ export default function Home() {
         setFavorites(favoritePairStorage.getFavoritePair())
     }
 
+    const handleSelectFavorite = (favorite: FavoritePair) => {
+        const selectedBase = currencies.find(
+            (currency) => currency.iso_code.toUpperCase() === favorite.base.toUpperCase()
+        )
+        const selectedQuote = currencies.find(
+            (currency) => currency.iso_code.toUpperCase() === favorite.quote.toUpperCase()
+        )
+
+        if (selectedBase) setBaseDevice(selectedBase)
+        if (selectedQuote) setQuoteDevice(selectedQuote)
+    }
+
     return (
         <>
             <Header currenciesCounter={isHydrated ? currencies.length : 0} />
@@ -111,6 +123,7 @@ export default function Home() {
                     onDeleteFavorite={handleDeleteFavorite}
                     onAddFavorite={handleAddFavorite}
                     onDeleteFavoriteByCode={handleDeleteFavoriteByCode}
+                    onSelectFavorite={handleSelectFavorite}
                 />
             </Content>
         </>

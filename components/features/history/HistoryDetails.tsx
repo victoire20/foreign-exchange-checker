@@ -35,7 +35,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
     let numericPercent = 0
 
     if (historyRate && historyRate.length > 1) {
-        numericChange = firstRate - lastRate
+        numericChange = lastRate - firstRate
         numericPercent = firstRate !== 0 ? (numericChange / firstRate) : 0
     }
 
