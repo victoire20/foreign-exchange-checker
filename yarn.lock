@@ -354,18 +354,6 @@
   resolved "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
   integrity sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==
 
-"@lottiefiles/dotlottie-react@^0.19.13":
-  version "0.19.13"
-  resolved "https://registry.npmjs.org/@lottiefiles/dotlottie-react/-/dotlottie-react-0.19.13.tgz"
-  integrity sha512-HqazA/AtVF5gWfsDhaHJKhJIyqXQLGvkfDQ00Pib1uepwCXCUwa+I6PJ3M/eNBcFMZGLmqF4oyo9On9JBsmjpg==
-  dependencies:
-    "@lottiefiles/dotlottie-web" "0.79.0"
-
-"@lottiefiles/dotlottie-web@0.79.0":
-  version "0.79.0"
-  resolved "https://registry.npmjs.org/@lottiefiles/dotlottie-web/-/dotlottie-web-0.79.0.tgz"
-  integrity sha512-i2OCChZvfsoKCnilkI1t72sR/jDLoLpX2q0nm2KpOXYQZvONMooCXcGy+H9J8ioh66d61/tfHUzP78YxZ73ypg==
-
 "@next/env@16.3.0":
   version "16.3.0"
   resolved "https://registry.npmjs.org/@next/env/-/env-16.3.0.tgz"

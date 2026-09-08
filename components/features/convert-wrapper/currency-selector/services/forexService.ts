@@ -1,4 +1,4 @@
-import {Currency, Rate} from "@/components/features/convert-wrapper/currency-selector/types/forex.type";
+import {Currency, LiveMarketRate, Rate} from "@/components/features/convert-wrapper/currency-selector/types/forex.type";
 import {getSubtractDate} from "@/utils/dateCalcul";
 
 interface RateProps {
@@ -59,33 +59,55 @@ export async function getRate({ base, quote }: RateProps): Promise<Rate> {
     return await response.json()
 }
 
-export async function getLiveMarkets(principalBase: Array<string>):  Promise<Rate[]> {
+export async function getLiveMarkets(principalBase: Array<string>): Promise<LiveMarketRate[]> {
     if (!uri) {
         throw new Error("No Live markets provided")
     }
 
     const today = new Date().toISOString().split('T')[0]
+    const previousDay = getSubtractDate('d').toISOString().split('T')[0]
 
-    // 1. Crée un tableau de promesses (les requêtes s'exécutent en parallèle)
-    const promises = principalBase.map(async (base) => {
+    const promises: Promise<LiveMarketRate[]>[] = principalBase.map(async (base) => {
         const baseUpper = base.toUpperCase()
-        const url = `${uri}/rates?base=${baseUpper}&from=${today}`
+        const [currentResponse, previousResponse] = await Promise.all([
+            fetch(`${uri}/rates?base=${baseUpper}&from=${today}`, {
+                next: { revalidate: 3600 },
+            }),
+            fetch(`${uri}/rates?base=${baseUpper}&from=${previousDay}&to=${previousDay}`, {
+                next: { revalidate: 3600 },
+            }),
+        ])
 
-        const response = await fetch(url, { next: { revalidate: 3600 } })
-        if (!response.ok) {
-            throw new Error(`Failed to fetch market data for ${baseUpper}`)
+        if (!currentResponse.ok || !previousResponse.ok) {
+            throw new Error(`Failed to fetch market comparison for ${baseUpper}`)
         }
 
-        // Correction ici : le JSON retourné par l'API est un tableau (Rate[])
-        const data = await response.json()
-        return data as Rate[]
+        const [currentData, previousData] = await Promise.all([
+            await currentResponse.json() as Promise<Rate[]>,
+            await previousResponse.json() as Promise<Rate[]>,
+        ])
+        const previousByQuote = new Map(previousData.map((rate) => [rate.quote, rate.rate]))
+        const currentByQuote = new Map(currentData.map((rate) => [rate.quote, rate]))
+
+        return Array.from(currentByQuote.values()).map((current) => {
+            const previousRate = previousByQuote.get(current.quote)
+            const percent = previousRate && previousRate !== 0
+                ? ((current.rate - previousRate) / previousRate) * 100
+                : undefined
+
+            return {
+                ...current,
+                previousRate,
+                percent,
+            }
+        })
     })
 
     const results = await Promise.allSettled(promises)
 
     // 2. Filtrer les succès et APLATIR les tableaux avec flatMap
     return results
-        .filter((result): result is PromiseFulfilledResult<Rate[]> => result.status === 'fulfilled')
+        .filter((result): result is PromiseFulfilledResult<LiveMarketRate[]> => result.status === 'fulfilled')
         .flatMap(result => result.value) // flatMap extrait et fusionne les tableaux [ [Rate, Rate], [Rate, Rate] ] en [ Rate, Rate, Rate, Rate ]
 }
 

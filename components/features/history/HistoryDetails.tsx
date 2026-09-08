@@ -20,6 +20,7 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
         q: rate.quote,
         p: period
     })
+    const controlsDisabled = Boolean(isLoading || currenciesIsLoading)
 
     const handleRefetch = async (p: string) => {
         setPeriod(p)
@@ -77,12 +78,12 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                 />
             </div>
             <nav
-                className={`${(isLoading || currenciesIsLoading) && 'skeleton-item'} p-0.5 max-w-71.5 rounded-lg bg-[#171719] flex 
+                className={`${(isLoading || currenciesIsLoading) ? 'skeleton-item' : ''} p-0.5 max-w-71.5 rounded-lg bg-[#171719] flex 
                 justify-between items-center text-[#9D9D9D] text-[12px] leading-[120%] tracking-[0.5px]`}>
                 <button
-                    disabled={isLoading}
+                    disabled={controlsDisabled}
                     className={
-                        `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
+                        `px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'd' ?
                             'text-white rounded-lg bg-[#2E2E2E]' :
                             'hover:text-white hover:bg-[#2E2E2E] hover:rounded-lg focus-visible:rounded-lg md:cursor-pointer'
@@ -91,9 +92,9 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('d')}
                 >1D</button>
                 <button
-                    disabled={isLoading}
+                    disabled={controlsDisabled}
                     className={
-                        `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
+                        `px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'w' ? 
                             'text-white rounded-lg bg-[#2E2E2E]' : 
                             'hover:text-white hover:bg-[#2E2E2E] hover:rounded-lg focus-visible:rounded-lg md:cursor-pointer'
@@ -102,9 +103,9 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('w')}
                 >1W</button>
                 <button
-                    disabled={isLoading}
+                    disabled={controlsDisabled}
                     className={
-                        `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
+                        `px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'm' ?
                             'text-white rounded-lg bg-[#2E2E2E]' :
                             'hover:text-white hover:bg-[#2E2E2E] hover:rounded-lg focus-visible:rounded-lg md:cursor-pointer'
@@ -113,9 +114,9 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('m')}
                 >1M</button>
                 <button
-                    disabled={isLoading}
+                    disabled={controlsDisabled}
                     className={
-                        `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
+                        `px-4 py-3 disabled:cursor-not-allowed
                          ${period === '3m' ?
                             'text-white rounded-lg bg-[#2E2E2E]' :
                             'hover:text-white hover:bg-[#2E2E2E] hover:rounded-lg focus-visible:rounded-lg md:cursor-pointer'
@@ -124,9 +125,9 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('3m')}
                 >3M</button>
                 <button
-                    disabled={isLoading}
+                    disabled={controlsDisabled}
                     className={
-                        `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
+                        `px-4 py-3 disabled:cursor-not-allowed
                          ${period === 'y' ?
                             'text-white rounded-lg bg-[#2E2E2E]' :
                             'hover:text-white hover:bg-[#2E2E2E] hover:rounded-lg focus-visible:rounded-lg md:cursor-pointer'
@@ -135,9 +136,9 @@ const HistoryDetails = ({ rate, currenciesIsLoading }: Props) => {
                     onClick={() => handleRefetch('y')}
                 >1Y</button>
                 <button
-                    disabled={isLoading}
+                    disabled={controlsDisabled}
                     className={
-                        `${(isLoading || currenciesIsLoading) && 'skeleton-item'} px-4 py-3 disabled:cursor-not-allowed
+                        `px-4 py-3 disabled:cursor-not-allowed
                          ${period === '5y' ?
                             'text-white rounded-lg bg-[#2E2E2E]' :
                             'hover:text-white hover:bg-[#2E2E2E] hover:rounded-lg focus-visible:rounded-lg md:cursor-pointer'

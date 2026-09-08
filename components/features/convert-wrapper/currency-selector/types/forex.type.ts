@@ -15,6 +15,11 @@ export type Rate = {
     rate: number;
 }
 
+export type LiveMarketRate = Rate & {
+    previousRate?: number;
+    percent?: number;
+}
+
 export type Log = {
     time: string;
     pair: [string, string];

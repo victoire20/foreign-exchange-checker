@@ -1,10 +1,8 @@
 import Image from "next/image"
 import {FaStar} from "react-icons/fa"
-import {CiStar} from "react-icons/ci"
 import {Select} from "@/components/features/convert-wrapper/currency-selector/Select"
 import {ChangeEvent, useMemo, useState} from "react"
 import {Currency, Log, Rate, FavoritePair} from "@/components/features/convert-wrapper/currency-selector/types/forex.type"
-import {logStorage} from "@/utils/logStorage";
 import {Toast} from "@/components/ui/toast";
 
 
@@ -52,6 +50,8 @@ export const ConvertWrapper = ({
 
     const currentBase = baseDevice?.iso_code.toUpperCase() || rate.base.toUpperCase()
     const currentQuote = quoteDevice?.iso_code.toUpperCase() || rate.quote.toUpperCase()
+    const selectedBaseCode = baseDevice?.iso_code.toLowerCase() || 'usd'
+    const selectedQuoteCode = quoteDevice?.iso_code.toLowerCase() || 'eur'
     const isCurrentPairFavorite = favorites.some(
         fav => fav.base.toUpperCase() === currentBase && fav.quote.toUpperCase() === currentQuote
     )
@@ -77,7 +77,7 @@ export const ConvertWrapper = ({
 
         const value = e.currentTarget.getAttribute('data-value')?.toLowerCase()
         if (!value) return
-        if (value === quoteDevice?.iso_code.toLowerCase()) return
+        if (value === selectedQuoteCode) return
 
         const selectedCurrency =
             filterData.find((currency: Currency) => currency.iso_code.toLowerCase() === value)
@@ -121,7 +121,7 @@ export const ConvertWrapper = ({
 
         const value = e.currentTarget.getAttribute('data-value')?.toLowerCase()
         if (!value) return
-        if (value === baseDevice?.iso_code.toLowerCase()) return
+        if (value === selectedBaseCode) return
 
         const selectedCurrency =
             filterData.find((currency: Currency) => currency.iso_code.toLowerCase() === value)
@@ -183,7 +183,7 @@ export const ConvertWrapper = ({
                             <div>
                                 <Select
                                     onChange={handleChange}
-                                    onClick={() => {setIsOpenBase(!isOpenBase)}}
+                                    onClick={() => setIsOpenBase((isOpen) => !isOpen)}
                                     onChoose={handleChooseBaseDevice}
                                     isOpen={isOpenBase}
                                     setIsOpen={setIsOpenBase}
@@ -251,7 +251,7 @@ export const ConvertWrapper = ({
                             <div>
                                 <Select
                                     onChange={handleChange}
-                                    onClick={() => {setIsOpenQuote(!isOpenQuote)}}
+                                    onClick={() => setIsOpenQuote((isOpen) => !isOpen)}
                                     onChoose={handleChooseRatingDevise}
                                     isOpen={isOpenQuote}
                                     setIsOpen={setIsOpenQuote}

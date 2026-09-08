@@ -22,9 +22,10 @@ export default function Home() {
     const [quoteValue, setQuoteValue] = useState<string>('')
     const [logData, setLogData] = useState<Log[]>([])
     const [favorites, setFavorites] = useState<FavoritePair[]>([])
+    const [isHydrated, setIsHydrated] = useState(false)
 
     const { data: currencies = [], isLoading: currenciesIsLoading } = useCurrencies()
-    const { data: rate = { date: '', base: '', quote: '', rate: 0 }, refetch } = useRate({
+    const { data: rate = { date: '', base: '', quote: '', rate: 0 }, isLoading: rateIsLoading } = useRate({
         b: baseDevice?.iso_code.toLowerCase() ?? 'usd',
         q: quoteDevice?.iso_code.toLowerCase() ?? 'eur'
     })
@@ -33,6 +34,7 @@ export default function Home() {
         // Charger les données depuis le localStorage au montage du composant (côté client)
         setLogData(logStorage.getLogs())
         setFavorites(favoritePairStorage.getFavoritePair())
+        setIsHydrated(true)
 
         const handleStorageUpdate = () => {
             setFavorites(favoritePairStorage.getFavoritePair())
@@ -41,6 +43,10 @@ export default function Home() {
         window.addEventListener("local-storage-update", handleStorageUpdate)
         return () => window.removeEventListener("local-storage-update", handleStorageUpdate)
     }, [])
+
+    const renderedCurrencies = isHydrated ? currencies : []
+    const renderedRate = isHydrated ? rate : { date: '', base: '', quote: '', rate: 0 }
+    const contentIsLoading = !isHydrated || currenciesIsLoading || rateIsLoading
 
     const handleAddLog = (newLog: Log) => {
         logStorage.addLog(newLog)
@@ -74,17 +80,12 @@ export default function Home() {
 
     return (
         <>
-            <Header currenciesCounter={currencies.length} />
+            <Header currenciesCounter={isHydrated ? currencies.length : 0} />
             <Content>
                 <ConvertWrapper
-                    currencies={
-                        currencies.filter(
-                            curr =>
-                                !['ang', 'xpt', 'xpf', 'xpd', 'xcg', 'xdr', 'xcd'].includes(curr.iso_code.toLowerCase())
-                        )
-                    }
-                    isLoading={currenciesIsLoading}
-                    rate={rate}
+                    currencies={renderedCurrencies}
+                    isLoading={contentIsLoading}
+                    rate={renderedRate}
                     baseDevice={baseDevice}
                     setBaseDevice={setBaseDevice}
                     baseValue={baseValue}
@@ -100,14 +101,16 @@ export default function Home() {
                 />
                 <Details
                     baseValue={baseValue}
-                    isLoading={currenciesIsLoading}
-                    rate={rate}
-                    currencies={currencies}
+                    isLoading={contentIsLoading}
+                    rate={renderedRate}
+                    currencies={renderedCurrencies}
                     logData={logData}
                     onDeleteLog={handleDeleteLog}
                     onClearLogs={handleClearLogs}
                     favorites={favorites}
                     onDeleteFavorite={handleDeleteFavorite}
+                    onAddFavorite={handleAddFavorite}
+                    onDeleteFavoriteByCode={handleDeleteFavoriteByCode}
                 />
             </Content>
         </>

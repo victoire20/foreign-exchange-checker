@@ -19,10 +19,10 @@ export const Card = ({
         `flex flex-col justify-between gap-4 w-full md:w-full py-3 px-5 rounded-2xl 
         bg-[#171719] border border-[#202022] ${className} ${isLoading ? 'skeleton-item' : ''}`
     }>
-        <span className={`uppercase opacity-70 text-[14px] leading-[120%] tracking-[1px] ${classNameLabel} ${isLoading ? 'skeleton-item' : ''}`}>
+        <span className={`uppercase opacity-70 text-[14px] leading-[120%] tracking-[1px] ${classNameLabel}`}>
             {label}
         </span>
-        <span className={`text-[20px] leading-[120%] tracking-[-0.5px] ${classNameValue} ${isLoading ? 'skeleton-item' : ''}`}>
+        <span className={`text-[20px] leading-[120%] tracking-[-0.5px] ${classNameValue}`}>
             {!isLoading ? value : ''}
         </span>
     </div>

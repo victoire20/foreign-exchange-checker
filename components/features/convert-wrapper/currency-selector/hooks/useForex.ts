@@ -19,7 +19,7 @@ export const useRate = ({ b, q }: { b: string; q: string }) => {
         queryKey: ['rate', b, q],
         queryFn: () => getRate({ base: b, quote: q }),
         enabled: Boolean(b && q),
-        staleTime: 3600000, // Équivalent du revalidate de Next.js (1 heure en cache client)
+        staleTime: 3600000,
     });
 }
 

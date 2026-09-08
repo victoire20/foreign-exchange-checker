@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@lottiefiles/dotlottie-react": "^0.19.13",
     "@tanstack/react-query": "^5.101.1",
     "@untitledui/icons": "^0.0.22",
     "chart.js": "^4.5.1",

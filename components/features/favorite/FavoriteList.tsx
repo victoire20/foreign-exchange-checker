@@ -50,7 +50,12 @@ const FavoriteList = ({ favorites, onDeleteFavorite }: Props) => {
 
     return <div className="bg-[#171719] border border-[#202022] p-[16px] md:p-[20px] rounded-[16px]">
         {showToast && isHydrated && <Toast message="Favorite removed" onClose={() => setShowToast(false)} />}
-        {isHydrated && favorites.length > 0 ? (
+        {!isHydrated ? (
+            <div className="flex flex-col gap-3">
+                <div className="skeleton-item h-5 w-36 rounded-md" />
+                <div className="skeleton-item h-14 w-full rounded-[10px]" />
+            </div>
+        ) : favorites.length > 0 ? (
             <>
                 <div className="uppercase flex justify-between items-center mb-[16px] md:mb-[20px]">
                     <span className="text-[16px] leading-[120%] tracking-[1px]">pinned pairs</span>

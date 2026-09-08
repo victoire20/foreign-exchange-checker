@@ -1,5 +1,5 @@
 import {FaCheck} from "react-icons/fa";
-import { CldImage } from "next-cloudinary";
+import { CurrencyFlag } from "@/components/ui/currency-flag";
 
 type ItemOptions = {
     className?: string;
@@ -25,9 +25,9 @@ export const SelectOption = ({
         onClick={(e) => onClick && onClick(e)}
     >
         <div className="flex items-center gap-3">
-            <CldImage
+            <CurrencyFlag
                 className="rounded-full object-cover"
-                src={`https://res.cloudinary.com/ckiepogy/image/upload/v1788561262/${flag}`}
+                src={flag ? `https://res.cloudinary.com/ckiepogy/image/upload/v1788561262/${flag}` : undefined}
                 alt={`flag ${iso_code}`}
                 width={20}
                 height={20}

@@ -76,8 +76,7 @@ Your users should be able to:
 ### Links
 
 - Solution URL: [https://github.com/victoire20/foreign-exchange-checker](https://github.com/victoire20/foreign-exchange-checker)
-- Live Site URL: [https://foreign-exchange-checker-murex.vercel.app](https://foreign-exchange-checker-murex.vercel.app)
-
+- Live Site URL: [https://foreign-exchange-checker-two.vercel.app](https://foreign-exchange-checker-two.vercel.app)
 ## My process
 
 ### Built with

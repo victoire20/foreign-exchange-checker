@@ -15,6 +15,7 @@ import {
 import {Line} from "react-chartjs-2";
 import {Rate} from "@/components/features/convert-wrapper/currency-selector/types/forex.type";
 import {dateFormat, getShortDate} from "@/utils/dateFormat";
+import {useEffect, useState} from "react";
 
 ChartJS.register(
     CategoryScale,
@@ -42,6 +43,11 @@ const options: ChartOptions<'line'> = {
         },
         title: {
             display: false,
+        },
+        tooltip: {
+            callbacks: {
+                label: (context) => Number(context.parsed.y).toFixed(4),
+            },
         },
     },
     scales: {
@@ -125,27 +131,31 @@ function formatLabels(period: string, historyRate: Array<Rate>): string[] {
 function extractChartData(historyRate: Array<Rate>, period: string, labels: string[]): number[] {
     if (historyRate.length === 0) return []
 
-    const currentHours = String(new Date().getHours()).padStart(2, '0')
-
     if (period === 'd') {
-        const lastHoursIndex = labels.findIndex(item => item.split(':')[0] === currentHours)
-
-        const endIndex = lastHoursIndex === -1 ? labels.length : lastHoursIndex + 1
+        const open = historyRate[0].rate
+        const close = historyRate.at(-1)?.rate ?? open
+        const currentHours = String(new Date().getHours()).padStart(2, '0')
+        const lastHoursIndex = labels.reduce(
+            (lastIndex, label, index) =>
+                label.split(':')[0] === currentHours ? index : lastIndex,
+            -1
+        )
+        const endIndex = currentHours === '00'
+            ? Math.min(2, labels.length)
+            : lastHoursIndex === -1
+                ? labels.length
+                : lastHoursIndex + 1
         const availableHours = labels.slice(0, endIndex)
 
-        return availableHours.map((item, index) => {
-            const hourPart = item.split(':')[0]
-            const minutePart = item.split(':')[1]
+        if (availableHours.length === 1) return [open]
 
-            if (hourPart === currentHours) {
-                return historyRate[0].rate
-            } else if (minutePart === currentHours) {
-                return historyRate[1]?.rate ?? historyRate[0].rate
-            } else {
-                const rateDiff = (historyRate[1]?.rate ?? historyRate[0].rate) - historyRate[0].rate
-                return ((index + 1) / availableHours.length) * rateDiff + historyRate[0].rate
-            }
-        });
+        return availableHours.map((_, index) => {
+            if (index === 0) return open
+            if (index === availableHours.length - 1) return close
+
+            const progress = index / (availableHours.length - 1)
+            return open + (close - open) * progress
+        })
     } else {
         return historyRate.map(item => item.rate)
     }
@@ -171,9 +181,15 @@ function normalizeYAxis(data: number[]): { min: number; max: number; padding: nu
 
 
 export default function ChartHistory({ rate, isLoading, historyRate, period }: Props) {
-    const labels = formatLabels(period, historyRate)
+    const [isHydrated, setIsHydrated] = useState(false)
 
-    const chartDataValues = extractChartData(historyRate, period, labels)
+    useEffect(() => {
+        setIsHydrated(true)
+    }, [])
+
+    const labels = isHydrated ? formatLabels(period, historyRate) : []
+    const chartDataValues = isHydrated ? extractChartData(historyRate, period, labels) : []
+    const chartIsLoading = isLoading || !isHydrated
 
     const yAxisConfig = normalizeYAxis(chartDataValues)
 
@@ -198,24 +214,30 @@ export default function ChartHistory({ rate, isLoading, historyRate, period }: P
     }
 
     return <>
-        {chartDataValues.length > 0 ? (
-            <div className={`${isLoading && 'skeleton-item'} bg-[#171719] border border-[#202022] px-3 py-4 md:px-5 md:py-5 rounded-2xl`}>
-                <div className={`${isLoading && 'skeleton-item'} flex justify-between items-center mb-4 md:mb-5`}>
-                    <span className={`${isLoading && 'skeleton-item'} uppercase text-[16px] leading-[120%] tracking-[1px]`}>
+        {chartIsLoading ? (
+            <div className="bg-[#171719] border border-[#202022] px-3 py-4 md:px-5 md:py-5 rounded-2xl">
+                <div className="flex justify-between items-center mb-4 md:mb-5">
+                    <span className="skeleton-item h-5 w-24 rounded-md" />
+                    <span className="skeleton-item h-4 w-32 rounded-md" />
+                </div>
+                <div className="skeleton-item h-75 w-full rounded-md" />
+            </div>
+        ) : chartDataValues.length > 0 ? (
+            <div className="bg-[#171719] border border-[#202022] px-3 py-4 md:px-5 md:py-5 rounded-2xl">
+                <div className="flex justify-between items-center mb-4 md:mb-5">
+                    <span className="uppercase text-[16px] leading-[120%] tracking-[1px]">
                         {rate.base}/{rate.quote}
                     </span>
-                    <span className={`${isLoading && 'skeleton-item'} opacity-70 text-[12px] leading-[120%] tracking-[0.5px]`}>
+                    <span className="opacity-70 text-[12px] leading-[120%] tracking-[0.5px]">
                         {chartDataValues[chartDataValues.length - 1]?.toFixed(5)} · {dateFormat(String(historyRate.at(-1)?.date))}
                     </span>
                 </div>
-                <div className={`${isLoading && 'skeleton-item'}`}>
-                    <AreaChart isLoading={isLoading} labels={labels} chartDataValues={chartDataValues} />
-                </div>
+                <AreaChart isLoading={false} labels={labels} chartDataValues={chartDataValues} />
             </div>
         ) : (
-            <div className={`${isLoading && 'skeleton-item'} bg-[#171719] border border-[#202022] rounded-2xl text-center py-5 px-20 md:py-10 md:px-45 lg:px-60`}>
-                <h2 className={`${isLoading && 'skeleton-item'} text-[#C6C6C6] text-[20px] leading-[120%] tracking-[-0.5px] mb-4`}>No chart data available</h2>
-                <p className={`${isLoading && 'skeleton-item'} text-[#9D9D9D] text-[14px] leading-[120%] tracking-[1px]`}>
+            <div className="bg-[#171719] border border-[#202022] rounded-2xl text-center py-5 px-20 md:py-10 md:px-45 lg:px-60">
+                <h2 className="text-[#C6C6C6] text-[20px] leading-[120%] tracking-[-0.5px] mb-4">No chart data available</h2>
+                <p className="text-[#9D9D9D] text-[14px] leading-[120%] tracking-[0.5px]">
                     {`We couldn't load rate history for ${rate.base}/${rate.quote} right now. This usually clears up in a minute.`}
                 </p>
             </div>

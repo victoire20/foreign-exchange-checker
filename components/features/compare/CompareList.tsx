@@ -2,7 +2,7 @@
 
 import {FaStar} from "react-icons/fa";
 import {CiStar} from "react-icons/ci";
-import {CldImage} from "next-cloudinary";
+import {CurrencyFlag} from "@/components/ui/currency-flag";
 
 type Currency = {
     flag: string;
@@ -18,9 +18,10 @@ interface Props {
     base: string;
     baseValue: string;
     data: Array<Currency>;
+    onToggleFavorite: (quote: string) => void;
 }
 
-const CompareList = ({ baseValue, currenciesIsLoading, base, data }: Props) => {
+const CompareList = ({ baseValue, currenciesIsLoading, base, data, onToggleFavorite }: Props) => {
 
     return <div className="bg-[#171719] border border-[#202022] p-[16px] md:p-[20px] rounded-[16px]">
         {data.length > 0 ? (
@@ -36,15 +37,15 @@ const CompareList = ({ baseValue, currenciesIsLoading, base, data }: Props) => {
                     </p>
                 </div>
                 <div className="flex flex-col items-center gap-[12px]">
-                    {data.filter(curr => !['ang', 'xpt', 'xpf', 'xpd', 'xcg', 'xdr', 'xcd'].includes(curr.codeIso.toLowerCase()))
-                        .map((item, index) => (
+                    {data.map((item, index) => (
                         <div
                             key={index}
+                            onClick={() => onToggleFavorite(item.codeIso)}
                             className="p-[12px] min-w-full bg-[#202022] border border-[#2E2E2E] hover:border-[#454547] rounded-[10px] flex
                                 justify-between items-center md:cursor-pointer">
                             <div className="flex gap-[10px] items-center">
                                 <div>
-                                    <CldImage
+                                    <CurrencyFlag
                                         className="rounded-[50%]"
                                         src={`${item.flag}`}
                                         alt={`flag ${item?.codeIso}`}
@@ -67,13 +68,20 @@ const CompareList = ({ baseValue, currenciesIsLoading, base, data }: Props) => {
                                     <span className="text-[16px] leading-[120%] tracking-[1px]">{item.value}</span>
                                     <span className="text-[#9D9D9D] text-[10px] leading-[100%] tracking-[0px]">@ {item.indice}</span>
                                 </div>
-                                <div className={`p-[8px] bg-[#202022] border border-[#2E2E2E] rounded-[8px] ${item.isFavorite && 'border-[#CEF739]'}`}>
+                                <button
+                                    type="button"
+                                    aria-label={item.isFavorite ? `Remove ${item.codeIso} from favorites` : `Add ${item.codeIso} to favorites`}
+                                    onClick={(event) => {
+                                        event.stopPropagation()
+                                        onToggleFavorite(item.codeIso)
+                                    }}
+                                    className={`p-[8px] bg-[#202022] border border-[#2E2E2E] rounded-[8px] hover:bg-[#3D3D3D] md:cursor-pointer ${item.isFavorite && 'border-[#CEF739]'}`}>
                                     {item.isFavorite ? (
                                         <FaStar className="text-[#CEF739]" />
                                     ) : (
                                         <CiStar />
                                     )}
-                                </div>
+                                </button>
                             </div>
                         </div>
                     ))}

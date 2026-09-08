@@ -22,13 +22,28 @@ interface Props {
     onClearLogs: () => void;
     favorites: FavoritePair[];
     onDeleteFavorite: (index: number) => void;
+    onAddFavorite: (base: string, quote: string) => void;
+    onDeleteFavoriteByCode: (base: string, quote: string) => void;
 }
 
-export default function Details({ rate, baseValue, isLoading, currencies, logData, onDeleteLog, onClearLogs, favorites, onDeleteFavorite }: Props) {
+export default function Details({
+    rate,
+    baseValue,
+    isLoading,
+    currencies,
+    logData,
+    onDeleteLog,
+    onClearLogs,
+    favorites,
+    onDeleteFavorite,
+    onAddFavorite,
+    onDeleteFavoriteByCode,
+}: Props) {
 
     const { data: compareRates = [] } = useCompareYesterdayRate({b: rate.base})
     const [showToastDelete, setShowToastDelete] = useState(false)
     const [showFavoriteToast, setShowFavoriteToast] = useState(false)
+    const [favoriteToastMessage, setFavoriteToastMessage] = useState("")
 
     const handleDeleteLog = (index: number) => {
         onDeleteLog(index)
@@ -44,6 +59,27 @@ export default function Details({ rate, baseValue, isLoading, currencies, logDat
 
     const handleDeleteFavoriteItem = (index: number) => {
         onDeleteFavorite(index)
+        setShowFavoriteToast(true)
+        setTimeout(() => setShowFavoriteToast(false), 3000)
+    }
+
+    const handleToggleCompareFavorite = (quote: string) => {
+        const base = rate.base.toUpperCase()
+        const normalizedQuote = quote.toUpperCase()
+        const isFavorite = favorites.some(
+            (favorite) =>
+                favorite.base.toUpperCase() === base &&
+                favorite.quote.toUpperCase() === normalizedQuote
+        )
+
+        if (isFavorite) {
+            onDeleteFavoriteByCode(base, normalizedQuote)
+            setFavoriteToastMessage("Removed from favorites")
+        } else {
+            onAddFavorite(base, normalizedQuote)
+            setFavoriteToastMessage("Added to favorites")
+        }
+
         setShowFavoriteToast(true)
         setTimeout(() => setShowFavoriteToast(false), 3000)
     }
@@ -70,10 +106,14 @@ export default function Details({ rate, baseValue, isLoading, currencies, logDat
                         maximumFractionDigits: 5,
                     }),
                     indice: item.rate.toFixed(4),
-                    isFavorite: false,
+                    isFavorite: favorites.some(
+                        (favorite) =>
+                            favorite.base.toUpperCase() === rate.base.toUpperCase() &&
+                            favorite.quote.toUpperCase() === item.quote.toUpperCase()
+                    ),
                 }
             })
-    }, [baseValue, currencies, compareRates])
+    }, [baseValue, currencies, compareRates, favorites, rate.base])
 
     const tabsContent = [
         {
@@ -84,7 +124,15 @@ export default function Details({ rate, baseValue, isLoading, currencies, logDat
         {
             label: "compare",
             value: "compare",
-            content: <CompareList baseValue={baseValue} currenciesIsLoading={isLoading} base={rate.base} data={compareData} />
+            content: (
+                <CompareList
+                    baseValue={baseValue}
+                    currenciesIsLoading={isLoading}
+                    base={rate.base}
+                    data={compareData}
+                    onToggleFavorite={handleToggleCompareFavorite}
+                />
+            )
         },
         {
             label: "favorites",
@@ -104,7 +152,7 @@ export default function Details({ rate, baseValue, isLoading, currencies, logDat
 
     return <div className="flex flex-col gap-4 mt-10">
         {showToastDelete && <Toast message="Log deleted successfully" onClose={() => setShowToastDelete(false)} />}
-        {showFavoriteToast && <Toast message="Favorite removed" onClose={() => setShowFavoriteToast(false)} />}
+        {showFavoriteToast && <Toast message={favoriteToastMessage} onClose={() => setShowFavoriteToast(false)} />}
         {/* Bloc Mobile (visible uniquement sous 768px) */}
         <Select
             value={activeTab}

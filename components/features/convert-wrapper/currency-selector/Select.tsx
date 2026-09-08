@@ -5,7 +5,7 @@ import {ChangeEvent, useRef} from "react";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
 import {useClickOutside} from "@/components/features/convert-wrapper/useClickOutside";
 import {Currency} from "@/components/features/convert-wrapper/currency-selector/types/forex.type";
-import { CldImage } from 'next-cloudinary';
+import { CurrencyFlag } from "@/components/ui/currency-flag";
 
 interface props {
     onClick: () => void;
@@ -50,38 +50,29 @@ export const Select = ({
             ? Buffer.from(str).toString('base64')
             : window.btoa(str)
     const dataUrl = `data:image/svg+xml;base64,${toBase64(shimmer(600, 400))}`
-    const dropdownRef = useRef<HTMLDivElement>(null)
+    const selectRef = useRef<HTMLDivElement>(null)
 
-    useClickOutside(dropdownRef, () => {
+    useClickOutside(selectRef, () => {
         setIsOpen(false)
     })
 
-    return <>
+    return <div ref={selectRef}>
         <div className="bg-[#2E2E2E] border border-[#3D3D3D] p-2.5 rounded-lg md:cursor-pointer flex items-center
             justify-between gap-2 hover:bg-[#3D3D3D] hover:border-[#3D3D3D] w-max"
              onClick={onClick}
         >
-            <CldImage
+            <CurrencyFlag
                 className="rounded-[50%]"
                 src={`https://res.cloudinary.com/ckiepogy/image/upload/v1788561262/${device?.iso_code?.toLowerCase().slice(0, 2)}.svg`}
-                defaultImage={"/images/placeholder.svg"}
                 alt={`flag ${device?.iso_code}`}
                 width={20}
                 height={20}
-                placeholder="blur"      // Active le placeholder
-                blurDataURL={dataUrl}   // Injecte votre SVG encodé en base64
+                placeholder="blur"
+                blurDataURL={dataUrl}
                 loading="lazy"
                 crop={{
                     type: 'auto',
                     source: true
-                }}
-                onError={(err) => {
-                    // Si Cloudinary ne trouve pas l'image (404), on bascule sur le placeholder
-                    //if (imgSrc !== placeholderFlag) {
-                    //    setImgSrc(placeholderFlag);
-                    //}
-                    console.log('err', err)
-                    //setImgSrc('https://placehold.co/600x400')
                 }}
             />
             <span className="uppercase">{device?.iso_code}</span>
@@ -89,7 +80,6 @@ export const Select = ({
         </div>
         {isOpen && (
             <div
-                ref={dropdownRef}
                 className={`absolute z-10 top-15 bg-[#202022] border border-[#3D3D3D] -left-4 -right-4 rounded-lg p-2 shadow-2xl ${className} 
                 transition-all duration-300 ease-out 
                     ${isOpen
@@ -118,5 +108,5 @@ export const Select = ({
                 </div>
             </div>
         )}
-    </>
+    </div>
 }

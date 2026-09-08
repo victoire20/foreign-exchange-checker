@@ -2,6 +2,7 @@ import {FaArrowRight} from "react-icons/fa";
 import {LuTrash} from "react-icons/lu";
 import {Log} from "@/components/features/convert-wrapper/currency-selector/types/forex.type";
 import {formatTimeAgo} from "@/utils/dateFormat";
+import {useEffect, useState} from "react";
 
 
 interface Props {
@@ -11,6 +12,11 @@ interface Props {
 }
 
 const LogList = ({ data, onClick, onClear }: Props) => {
+    const [isHydrated, setIsHydrated] = useState(false)
+
+    useEffect(() => {
+        setIsHydrated(true)
+    }, [])
 
     return <div className="bg-[#171719] border border-[#202022] p-[16px] md:p-[20px] rounded-[16px]">
         {data.length > 0 ? (
@@ -33,7 +39,9 @@ const LogList = ({ data, onClick, onClear }: Props) => {
                             key={index}
                             className="flex flex-row justify-between bg-[#202022] border border-[#2E2E2E] p-[12px] rounded-[8px]">
                             <div className="flex flex-col gap-[4px] md:flex-row md:justify-between md:gap-[48px] md:items-center">
-                                <span className="text-[#9D9D9D] text-[14px] leading-[120%] tracking-[1px] uppercase">{formatTimeAgo(new Date(item.time))}</span>
+                                <span className="text-[#9D9D9D] text-[14px] leading-[120%] tracking-[1px] uppercase">
+                                    {isHydrated ? formatTimeAgo(new Date(item.time)) : "—"}
+                                </span>
                                 <div className="uppercase flex gap-[8px] items-center text-[14px] leading-[120%] tracking-[1px]">
                                     {item.pair[0]} <FaArrowRight className="text-[#9D9D9D] text-[10px]" /> {item.pair[1]}
                                 </div>
