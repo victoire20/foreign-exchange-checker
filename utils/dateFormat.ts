@@ -71,25 +71,22 @@ export function getShortDate(period: string, dateInput: string): string {
 
     switch (period) {
         case 'd':
-            // Mon 01 Fri 10 ...
-            return `${dayShort} ${day}`;
+            const heures = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${heures}:${minutes}`;
 
         case 'w':
         case 'm':
-            // Mon 01 Fri 10 ...
             return `${dayShort} ${day}`;
 
         case '3m':
-            // Mon 01 Jan ...
             return `${dayShort} ${day} ${monthShort}`;
 
         case 'y':
         case '1y':
-            // Jan 2026 ...
             return `${monthShort} ${year}`;
 
         case '5y':
-            // Jan 2026 ...
             return `${monthShort} ${year}`;
 
         default:

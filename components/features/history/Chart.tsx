@@ -88,35 +88,69 @@ interface Props {
     period: string;
 }
 
+
 function formatLabels(period: string, historyRate: Array<Rate>): string[] {
     if (historyRate.length === 0) return []
 
     const labels = historyRate.map(item => getShortDate(period, item.date))
 
-    if (period === 'd' || period === 'w') {
-        return labels;
+    if (period === 'd') {
+        const result = []
+        for (let i=0; i<24; i++) {
+            result.push(`${String(i).padStart(2, '0')}:00`)
+        }
+        result.push('00:00')
+        return result
     }
 
-    const uniqueLabels: string[] = [];
-    let lastLabel = '';
+    if (period === 'w') {
+        return labels
+    }
+
+    const uniqueLabels: string[] = []
+    let lastLabel = ''
     
     labels.forEach((label, index) => {
         if (label !== lastLabel) {
-            uniqueLabels.push(label);
-            lastLabel = label;
+            uniqueLabels.push(label)
+            lastLabel = label
         } else {
-            uniqueLabels.push(label);
+            uniqueLabels.push(label)
         }
     });
     
-    return uniqueLabels;
+    return uniqueLabels
 }
 
-function extractChartData(historyRate: Array<Rate>): number[] {
+function extractChartData(historyRate: Array<Rate>, period: string, labels: string[]): number[] {
     if (historyRate.length === 0) return []
-    
-    return historyRate.map(item => item.rate)
+
+    const currentHours = String(new Date().getHours()).padStart(2, '0')
+
+    if (period === 'd') {
+        const lastHoursIndex = labels.findIndex(item => item.split(':')[0] === currentHours)
+
+        const endIndex = lastHoursIndex === -1 ? labels.length : lastHoursIndex + 1
+        const availableHours = labels.slice(0, endIndex)
+
+        return availableHours.map((item, index) => {
+            const hourPart = item.split(':')[0]
+            const minutePart = item.split(':')[1]
+
+            if (hourPart === currentHours) {
+                return historyRate[0].rate
+            } else if (minutePart === currentHours) {
+                return historyRate[1]?.rate ?? historyRate[0].rate
+            } else {
+                const rateDiff = (historyRate[1]?.rate ?? historyRate[0].rate) - historyRate[0].rate
+                return ((index + 1) / availableHours.length) * rateDiff + historyRate[0].rate
+            }
+        });
+    } else {
+        return historyRate.map(item => item.rate)
+    }
 }
+
 
 function normalizeYAxis(data: number[]): { min: number; max: number; padding: number } {
     if (data.length === 0) return { min: 0, max: 1, padding: 0 }
@@ -135,10 +169,11 @@ function normalizeYAxis(data: number[]): { min: number; max: number; padding: nu
     }
 }
 
+
 export default function ChartHistory({ rate, isLoading, historyRate, period }: Props) {
     const labels = formatLabels(period, historyRate)
 
-    const chartDataValues = extractChartData(historyRate)
+    const chartDataValues = extractChartData(historyRate, period, labels)
 
     const yAxisConfig = normalizeYAxis(chartDataValues)
 

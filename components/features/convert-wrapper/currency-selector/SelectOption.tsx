@@ -1,5 +1,5 @@
-import Image from "next/image";
 import {FaCheck} from "react-icons/fa";
+import { CldImage } from "next-cloudinary";
 
 type ItemOptions = {
     className?: string;
@@ -25,12 +25,17 @@ export const SelectOption = ({
         onClick={(e) => onClick && onClick(e)}
     >
         <div className="flex items-center gap-3">
-            <Image
+            <CldImage
                 className="rounded-full object-cover"
-                src={flag as string}
+                src={`https://res.cloudinary.com/ckiepogy/image/upload/v1788561262/${flag}`}
                 alt={`flag ${iso_code}`}
                 width={20}
                 height={20}
+                loading="lazy"
+                crop={{
+                    type: 'auto',
+                    source: true
+                }}
             />
             <span className="uppercase text-white text-[14px] leading-[120%] tracking-[1px]">{iso_code}</span>
             <span className="text-[#9D9D9D] text-[12px] leading-[120%] tracking-[0.5px]">{label}</span>

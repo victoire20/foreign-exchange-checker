@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image";
 import {FaStar} from "react-icons/fa";
 import {CiStar} from "react-icons/ci";
+import {CldImage} from "next-cloudinary";
 
 type Currency = {
     flag: string;
@@ -36,14 +36,26 @@ const CompareList = ({ baseValue, currenciesIsLoading, base, data }: Props) => {
                     </p>
                 </div>
                 <div className="flex flex-col items-center gap-[12px]">
-                    {data.map((item, index) => (
+                    {data.filter(curr => !['ang', 'xpt', 'xpf', 'xpd', 'xcg', 'xdr', 'xcd'].includes(curr.codeIso.toLowerCase()))
+                        .map((item, index) => (
                         <div
                             key={index}
                             className="p-[12px] min-w-full bg-[#202022] border border-[#2E2E2E] hover:border-[#454547] rounded-[10px] flex
                                 justify-between items-center md:cursor-pointer">
                             <div className="flex gap-[10px] items-center">
                                 <div>
-                                    <Image className="rounded-[50%]" src={`${item.flag}`} alt={`flag ${item.codeIso}`} width={24} height={24} />
+                                    <CldImage
+                                        className="rounded-[50%]"
+                                        src={`${item.flag}`}
+                                        alt={`flag ${item?.codeIso}`}
+                                        width={24}
+                                        height={24}
+                                        loading="lazy"
+                                        crop={{
+                                            type: 'auto',
+                                            source: true
+                                        }}
+                                    />
                                 </div>
                                 <div className="flex flex-col gap-[6px] justify-between">
                                     <span className="uppercase text-[14px] leading-[120%] tracking-[1px]">{item.codeIso}</span>

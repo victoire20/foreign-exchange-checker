@@ -48,7 +48,7 @@ export const SelectOptions = ({
                     {popularCurrencies.map((item, index) => (
                         <SelectOption
                             key={index}
-                            flag={`/images/1x1/${item.iso_code.toLowerCase().slice(0, 2)}.svg`}
+                            flag={`${item.iso_code.toLowerCase().slice(0, 2)}.svg`}
                             iso_code={item.iso_code}
                             label={item.name}
                             isChecked={item.iso_code === activeCurrency}
@@ -67,7 +67,7 @@ export const SelectOptions = ({
             {otherCurrencies.map((item, index) => (
                 <SelectOption
                     key={index}
-                    flag={`/images/1x1/${item.iso_code.slice(0, 2)}.svg`}
+                    flag={`${item.iso_code.slice(0, 2)}.svg`}
                     iso_code={item.iso_code}
                     label={item.name}
                     isChecked={item.iso_code === activeCurrency}

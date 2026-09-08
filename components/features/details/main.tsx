@@ -62,7 +62,7 @@ export default function Details({ rate, baseValue, isLoading, currencies, logDat
                 const currency = currenciesByCode.get(item.quote.toUpperCase())
 
                 return {
-                    flag: `/images/1x1/${item.quote.slice(0, 2).toLowerCase()}.svg`,
+                    flag: `https://res.cloudinary.com/ckiepogy/image/upload/v1788561262/${item.quote.slice(0, 2).toLowerCase()}.svg`,
                     codeIso: item.quote.toLowerCase(),
                     name: currency?.name ?? item.quote,
                     value: (amount * item.rate).toLocaleString('en-US', {

@@ -77,7 +77,12 @@ export default function Home() {
             <Header currenciesCounter={currencies.length} />
             <Content>
                 <ConvertWrapper
-                    currencies={currencies}
+                    currencies={
+                        currencies.filter(
+                            curr =>
+                                !['ang', 'xpt', 'xpf', 'xpd', 'xcg', 'xdr', 'xcd'].includes(curr.iso_code.toLowerCase())
+                        )
+                    }
                     isLoading={currenciesIsLoading}
                     rate={rate}
                     baseDevice={baseDevice}

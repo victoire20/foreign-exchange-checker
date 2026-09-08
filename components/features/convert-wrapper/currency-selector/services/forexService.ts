@@ -77,8 +77,8 @@ export async function getLiveMarkets(principalBase: Array<string>):  Promise<Rat
         }
 
         // Correction ici : le JSON retourné par l'API est un tableau (Rate[])
-        const data = await response.json();
-        return data as Rate[];
+        const data = await response.json()
+        return data as Rate[]
     })
 
     const results = await Promise.allSettled(promises)
