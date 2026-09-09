@@ -8,7 +8,7 @@ type params = {
     searchKey?: string;
     isLoading: boolean;
     currencies: Array<Currency>;
-    onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 
