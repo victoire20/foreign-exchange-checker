@@ -7,7 +7,7 @@ type ItemOptions = {
     iso_code: string;
     label: string;
     isChecked?: boolean;
-    onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export const SelectOption = ({
