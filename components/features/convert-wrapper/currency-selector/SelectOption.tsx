@@ -18,9 +18,11 @@ export const SelectOption = ({
     isChecked = false,
     onClick,
 }: ItemOptions) => {
-    return <a
-        role="button"
-        className={`flex justify-between items-center py-3 px-2 hover:bg-[#2E2E2E] rounded-md md:cursor-pointer ${className}`}
+    return <button
+        type="button"
+        role="option"
+        aria-selected={isChecked}
+        className={`flex justify-between items-center py-3 px-2 w-full hover:bg-[#2E2E2E] rounded-md md:cursor-pointer ${className}`}
         data-value={iso_code}
         onClick={(e) => onClick && onClick(e)}
     >
@@ -41,5 +43,5 @@ export const SelectOption = ({
             <span className="text-[#9D9D9D] text-[12px] leading-[120%] tracking-[0.5px]">{label}</span>
         </div>
         {isChecked && (<FaCheck />)}
-    </a>
+    </button>
 }

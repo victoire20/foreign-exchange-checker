@@ -51,15 +51,21 @@ export const Select = ({
             : window.btoa(str)
     const dataUrl = `data:image/svg+xml;base64,${toBase64(shimmer(600, 400))}`
     const selectRef = useRef<HTMLDivElement>(null)
+    const triggerRef = useRef<HTMLButtonElement>(null)
 
     useClickOutside(selectRef, () => {
         setIsOpen(false)
+        triggerRef.current?.focus()
     })
 
     return <div ref={selectRef}>
-        <div className="bg-[#2E2E2E] border border-[#3D3D3D] p-2.5 rounded-lg md:cursor-pointer flex items-center
+        <button className="bg-[#2E2E2E] border border-[#3D3D3D] p-2.5 rounded-lg md:cursor-pointer flex items-center
             justify-between gap-2 hover:bg-[#3D3D3D] hover:border-[#3D3D3D] w-max"
-             onClick={onClick}
+            ref={triggerRef}
+            type="button"
+            onClick={onClick}
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
         >
             <CurrencyFlag
                 className="rounded-[50%]"
@@ -77,7 +83,7 @@ export const Select = ({
             />
             <span className="uppercase">{device?.iso_code}</span>
             {isOpen ? (<FaCaretUp className={"text-[22px]"} />) : (<FaCaretDown className="text-[22px]" />)}
-        </div>
+        </button>
         {isOpen && (
             <div
                 className={`absolute z-10 top-15 bg-[#202022] border border-[#3D3D3D] -left-4 -right-4 rounded-lg p-2 shadow-2xl ${className} 
@@ -93,11 +99,12 @@ export const Select = ({
                         className="pl-9 w-full h-full focus-within:border-none focus-within:outline-none rounded-md"
                         type="text"
                         placeholder="Search currencies ..."
+                        aria-label="Search currencies"
                         onChange={onChange}
                     />
                 </div>
 
-                <div className="max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                <div role="listbox" className="max-h-64 overflow-y-auto pr-1 custom-scrollbar">
                     <SelectOptions
                         activeCurrency={device?.iso_code}
                         searchKey={!isOpen ? '' : searchKey}

@@ -129,7 +129,6 @@ export default function Details({
             content: (
                 <CompareList
                     baseValue={baseValue}
-                    currenciesIsLoading={isLoading}
                     base={rate.base}
                     data={compareData}
                     onToggleFavorite={handleToggleCompareFavorite}
@@ -170,26 +169,34 @@ export default function Details({
         />
 
         {/* Bloc Tablette/Desktop (masqué sous 768px, visible au-dessus) */}
-        <nav className="hidden md:flex gap-2 border-b border-[#202022] text-base leading-[1.2] tracking-wider text-[#A0A0A5]">
-            {tabsContent.map((tab, index) => (
-                <button
-                    key={index}
-                    onClick={() => setActiveTab(tab.value)}
-                    className={`
-                       ${typeof tab.badge === 'number' && tab.badge >= 0 && 'flex gap-2'} uppercase px-4 py-[10.5px] 
-                       ${activeTab === tab.value ? 'border-b-2 border-[#CEF739] text-white' : 'border-b-2 border-transparent'} 
-                       hover:text-white transition-all duration-300 md:cursor-pointer focus-visible:rounded-sm 
-                        ${isLoading && 'skeleton-item'}
+        <div aria-label="Exchange details"
+             role="tablist"
+             className="hidden md:flex gap-2 border-b border-[#202022] text-base leading-[1.2] tracking-wider text-[#A0A0A5]">
+                {tabsContent.map((tab) => (
+                    <button
+                        key={tab.value}
+                        role="tab"
+                        id={`${tab.value}-tab`}
+                        aria-selected={activeTab === tab.value}
+                        aria-controls={`${tab.value}-panel`}
+                        onClick={() => setActiveTab(tab.value)}
+                        className={`
+                            ${typeof tab.badge === 'number' && tab.badge >= 0 && 'flex gap-2'} uppercase px-4 py-[10.5px] 
+                            ${activeTab === tab.value ? 'border-b-2 border-[#CEF739] text-white' : 'border-b-2 border-transparent'} 
+                            hover:text-white transition-all duration-300 md:cursor-pointer focus-visible:rounded-sm 
+                            ${isLoading && 'skeleton-item'}
                     `}>
-                    {tab.label}
-                    {typeof tab.badge === 'number' && tab.badge >= 0 && (
-                        <Badge isLoading={isLoading} value={tab.badge} />
-                    )}
-                </button>
-            ))}
-        </nav>
+                        {tab.label}
+                        {typeof tab.badge === 'number' && tab.badge >= 0 && (
+                            <Badge isLoading={isLoading} value={tab.badge} />
+                        )}
+                    </button>
+                ))}
+        </div>
 
         {/* Historique, compare, favorites and logs div */}
-        {tabsContent.find((tab) => tab.value === activeTab)?.content}
+        <div role="tabpanel" id={`${activeTab}-panel`} aria-labelledby={`${activeTab}-tab`} className="flex flex-col gap-4">
+            {tabsContent.find((tab) => tab.value === activeTab)?.content}
+        </div>
     </div>
 }

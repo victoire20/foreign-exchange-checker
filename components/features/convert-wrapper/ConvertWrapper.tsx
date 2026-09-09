@@ -159,7 +159,7 @@ export const ConvertWrapper = ({
                         flex flex-col justify-between gap-5 md:min-w-[40%]`
                     }
                 >
-                    <span className="uppercase text-[#C6C6C6] text-[14px] leading-[120%] tracking-[1px]">
+                    <span id="base-amount" className="uppercase text-[#C6C6C6] text-[14px] leading-[120%] tracking-[1px]">
                         {!isLoading && "send"}
                     </span>
                     <div className="relative flex justify-between items-center">
@@ -167,6 +167,8 @@ export const ConvertWrapper = ({
                             <input
                                 type="text"
                                 inputMode="decimal"
+                                name="base"
+                                aria-labelledby="base-amount"
                                 value={baseValue}
                                 onChange={(e) => {
                                     let rawValue = e.target.value
@@ -180,7 +182,7 @@ export const ConvertWrapper = ({
                                     }
                                 }}
                                 placeholder="0.00"
-                                className="text-[#FFF] text-[32px] leading-[100%] inputexch tracking-[-0.5px] w-full hover:underline"
+                                className="text-white text-[32px] leading-[100%] inputexch tracking-[-0.5px] w-full hover:underline"
                             />
                             <div>
                                 <Select
@@ -228,13 +230,15 @@ export const ConvertWrapper = ({
                         flex flex-col justify-between gap-5 md:min-w-[40%]`
                     }
                 >
-                    <span className="uppercase text-[#C6C6C6] text-[14px] leading-[120%] tracking-[1px]">
+                    <span id="quote-amount" className="uppercase text-[#C6C6C6] text-[14px] leading-[120%] tracking-[1px]">
                         {!isLoading && 'receive'}
                     </span>
                     <div className="relative flex justify-between items-center">
                         {!isLoading && <>
                             <input
                                 type="text"
+                                name="quote"
+                                aria-labelledby="quote-amount"
                                 value={quoteValue}
                                 onChange={(e) => {
                                     let rawValue = e.target.value
@@ -269,7 +273,7 @@ export const ConvertWrapper = ({
             </div>
             <div className="border-t border-[#2E2E2E] border-dashed p-4 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p className={
-                    `${isLoading && 'skeleton-item'} text-[#FFF] text-[10px] leading-[100%] tracking-normal 
+                    `${isLoading && 'skeleton-item'} text-white text-[10px] leading-[100%] tracking-normal 
                     md:text-[12px] md:leading-[120%] md:tracking-[0.5px]`
                 }>
                     1 <span className="uppercase">{`${baseDevice?.iso_code.toLowerCase() || 'usd'}`}</span> = {rate.rate} <span className="uppercase">{`${quoteDevice?.iso_code.toLowerCase() || 'eur'}`}</span>

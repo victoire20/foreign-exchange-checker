@@ -22,13 +22,10 @@ export const SelectOptions = ({
     const popularCurrencies = useMemo<Currency[]>(() => {
         return currencies.filter(curr => ['usd', 'eur', 'gbp'].includes(curr.iso_code.toLowerCase()))
     }, [currencies])
-    
-    const otherCurrencies = useMemo<Currency[]>(() => {
-        if (searchKey && !['usd', 'eur', 'gbp'].includes(searchKey.toLowerCase())) {
-            return currencies.filter(curr => !['usd', 'eur', 'gbp'].includes(curr.iso_code.toLowerCase()))
-        }
-        return currencies
-    }, [currencies, searchKey])
+
+    const otherCurrencies = useMemo(() =>
+        searchKey ? currencies : currencies.filter(c =>
+            !['usd', 'eur', 'gbp'].includes(c.iso_code.toLowerCase())), [currencies, searchKey])
 
     if (isLoading) {
         return <div className="p-2 text-[#9D9D9D] text-[12px] leading-[120%] tracking-[0.5px] text-center">
