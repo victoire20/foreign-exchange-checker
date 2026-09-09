@@ -1,7 +1,7 @@
 import Image from "next/image"
 import {FaStar} from "react-icons/fa"
 import {Select} from "@/components/features/convert-wrapper/currency-selector/Select"
-import {ChangeEvent, useMemo, useState} from "react"
+import React, {ChangeEvent, useMemo, useState} from "react"
 import {Currency, Log, Rate, FavoritePair} from "@/components/features/convert-wrapper/currency-selector/types/forex.type"
 import {Toast} from "@/components/ui/toast";
 
@@ -72,7 +72,7 @@ export const ConvertWrapper = ({
         setSearchKey(e.target.value)
     }
 
-    const handleChooseBaseDevice = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const handleChooseBaseDevice = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
 
         const value = e.currentTarget.getAttribute('data-value')?.toLowerCase()
@@ -116,7 +116,7 @@ export const ConvertWrapper = ({
         setTimeout(() => setShowToastLog(false), 3000)
     }
 
-    const handleChooseRatingDevise = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const handleChooseRatingDevise = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
 
         const value = e.currentTarget.getAttribute('data-value')?.toLowerCase()

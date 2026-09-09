@@ -10,7 +10,7 @@ import { CurrencyFlag } from "@/components/ui/currency-flag";
 interface props {
     onClick: () => void;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onChoose?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+    onChoose?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     className?: string;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
